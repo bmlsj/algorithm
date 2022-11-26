@@ -11,5 +11,3 @@ for i in range(t):
     for j in range(len(ans)):
         if ans[j] == 1:
             print(j, end=" ")
-
-    print("")
