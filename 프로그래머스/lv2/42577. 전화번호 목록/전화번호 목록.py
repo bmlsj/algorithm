@@ -1,20 +1,15 @@
 def solution(phone_book):
-    answer = 0
-    phone_book.sort()
-    find = phone_book[0]
-
-    v = []
-    for i in range(1, len(phone_book)):
-        v.append(phone_book[i][:len(phone_book[0])])
+    ans = True
+    hash = {}
     
-    print(v)
-    for idx, value in enumerate(v):
-        if value == find:
-            answer += 1
+    for i in phone_book:
+        hash[i] = 1
 
-        else:
-            answer += 0
+    for i in phone_book:
+        tmp = ''
+        for j in i:
+            tmp += j
+            if tmp in hash and tmp != i:
+                ans = False
 
-    if answer != 0:
-        return False
-    else: return True
+    return ans
