@@ -1,6 +1,7 @@
 def solution(n, t):
 
-    for _ in range(t):
-        n *= 2
+    # for _ in range(t):
+    #     n *= 2
     
-    return n
+    # return n
+    return n << t
