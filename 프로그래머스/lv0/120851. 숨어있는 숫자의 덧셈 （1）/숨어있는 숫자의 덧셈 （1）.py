@@ -6,5 +6,7 @@ def solution(my_string):
         if i in right:
             s += int(i)
     
+    # return sum(int(i) for i in my_string if i.isdigit())
+    
     return s
     
