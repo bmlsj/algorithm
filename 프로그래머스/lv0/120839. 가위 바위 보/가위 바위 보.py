@@ -4,6 +4,5 @@ def solution(rsp):
     game = {'2':'0', '0':'5', '5':'2'}
     s = ''
     for i in rsp:
-        if i in game.keys():
-            s += game[i]
+        s += game[i]
     return s
