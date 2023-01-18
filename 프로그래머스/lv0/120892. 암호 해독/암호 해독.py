@@ -5,4 +5,5 @@ def solution(cipher, code):
         if (i+1) % code == 0:
             s += cipher[i]
     
-    return s
+    # return s
+    return cipher[code-1::code]
