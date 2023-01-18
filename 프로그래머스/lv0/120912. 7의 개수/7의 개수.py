@@ -6,4 +6,5 @@ def solution(array):
             if j == '7':
                 cnt += 1
     
-    return cnt
+   # return cnt
+    return str(array).count('7')
