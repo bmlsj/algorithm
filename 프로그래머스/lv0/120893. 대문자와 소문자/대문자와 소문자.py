@@ -8,4 +8,5 @@ def solution(my_string):
             s += i.upper()
     
     return s
+    # return my_string.swapcase()
         
