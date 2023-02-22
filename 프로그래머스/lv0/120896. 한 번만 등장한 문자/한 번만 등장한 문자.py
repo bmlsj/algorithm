@@ -1,5 +1,5 @@
 def solution(s):
-    
+    """
     sarr = []
     for i in s:
         sarr.append(i)
@@ -12,4 +12,7 @@ def solution(s):
             ans += i
     
     return ans
+    """
+    ans = sorted([ch for ch in s if s.count(ch) == 1])
+    return ''.join(ans)
         
