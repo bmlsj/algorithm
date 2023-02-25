@@ -4,7 +4,7 @@ def solution(dots):
     h_list = []
     for i in range(len(dots)):
         l_list.append(dots[i][0])
-        
+
     for i in range(len(dots)):    
         h_list.append(dots[i][1])
     
