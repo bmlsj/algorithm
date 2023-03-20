@@ -1,15 +1,12 @@
 def solution(sizes):
     
-    wid = []
-    height = []
+    wid, hei = 0, 0
     for w, h in sizes:
         if w > h:
             w, h = h, w
-            wid.append(w)
-            height.append(h)
-        else:
-            wid.append(w)
-            height.append(h)
+        
+        wid = max(wid, w)
+        hei = max(hei, h)
     
-    return max(wid) * max(height)
+    return wid * hei
     
