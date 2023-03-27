@@ -1,0 +1,2 @@
+-- 코드를 입력하세요
+SELECT count(*) FROM USER_INFO WHERE (AGE BETWEEN 20 and 29) AND JOINED LIKE '2021%';
