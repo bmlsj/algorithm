@@ -3,7 +3,8 @@ def solution(s):
 
     sen = s.split(" ")
     ans = ""
-    """
+    
+    # lower와 upper 사용해 풀이
     for c in sen:
         if c == "":
             ans += ""
@@ -14,8 +15,9 @@ def solution(s):
         ans += " "
         
     return ans[:-1]
-    """
     
+    
+    # capitalize() 사용
     for i in sen:
         if i == "":
             ans += ""
