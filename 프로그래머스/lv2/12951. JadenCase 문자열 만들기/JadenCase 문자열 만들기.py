@@ -1,8 +1,9 @@
 
 def solution(s):
+
     sen = s.split(" ")
     ans = ""
-    
+    """
     for c in sen:
         if c == "":
             ans += ""
@@ -12,4 +13,13 @@ def solution(s):
             ans += c[1:]
         ans += " "
         
+    return ans[:-1]
+    """
+    
+    for i in sen:
+        if i == "":
+            ans += ""
+        else:
+            ans += i.capitalize()
+        ans += " "
     return ans[:-1]
