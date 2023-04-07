@@ -1,15 +1,17 @@
-from itertools import combinations
-import sys
-input = sys.stdin.readline
+def dfs(v, depth):
+    if depth == 6:
+        print(*order)
+        return
+    for i in range(v, k):
+        order.append(arr[i])
+        dfs(i+1, depth+1)
+        order.pop()
+
 while True:
-        k, *arr = map(int, input().split())
-        if k == 0:
-            break
+    k, *arr = map(int, input().split())
+    if k == 0:
+        break
 
-        a = list(combinations(arr, 6))
-        for i in a:
-            for j in i:
-                print(j, end=' ')
-            print()
-
-        print()
+    order = []
+    dfs(0, 0)
+    print()
