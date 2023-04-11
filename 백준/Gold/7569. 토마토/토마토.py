@@ -46,10 +46,10 @@ flag = True
 
 for i in range(h):
     for j in range(n):
-        for k in range(m):
-            cnt = max(cnt, tomato[i][j][k] - 1)
-            if tomato[i][j][k] == 0:
-                flag = False
+        #         for k in range(m):
+        cnt = max(cnt, max(tomato[i][j]) - 1)
+        if tomato[i][j].count(0) != 0:
+            flag = False
 
 if flag:
     print(cnt)
