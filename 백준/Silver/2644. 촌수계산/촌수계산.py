@@ -16,19 +16,13 @@ for _ in range(m):
     relation[b].sort()
 
 
-def bfs(v):
-    q = deque()
-    q.append(v)
-
-    while q:
-        x = q.popleft()
-
-        for i in relation[x]:
-            if not visited[i]:
-                q.append(i)
-                visited[i] = visited[x] + 1
+def dfs(v):
+    for i in relation[v]:
+        if not visited[i]:
+            visited[i] = visited[v] + 1
+            dfs(i)
 
 
-bfs(p1)
+dfs(p1)
 
 print(visited[p2] if visited[p2] > 0 else -1)
