@@ -1,12 +1,14 @@
 def solution(n, m):
-    ans = []  
+    
+    ans = []
     for i in range(min(n, m), 0, -1):
-        if n%i ==0 and m%i ==0:
+        if n % i == 0 and m %i == 0:
             ans.append(i)
             break
-    for j in range(max(n, m), (n*m)+1):
-        if j%n==0 and j%m==0:
-            ans.append(j)
+    
+    for i in range(max(n, m), n*m+1):
+        if i % n == 0 and i % m == 0:
+            ans.append(i)
             break
-            
+    
     return ans
