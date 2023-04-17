@@ -1,10 +1,9 @@
 def solution(n):
     
-    d = [0] * (n+1)
-
-    d[1] = d[2] = 1
-
-    for i in range(3, n + 1):
-        d[i] = d[i-1] + d[i-2]
-
-    return d[n] % 1234567
+    def fibonacci(num):
+        a, b = 0, 1
+        for i in range(num):
+            a, b = b, a+b
+        return a
+    
+    return fibonacci(n) % 1234567
