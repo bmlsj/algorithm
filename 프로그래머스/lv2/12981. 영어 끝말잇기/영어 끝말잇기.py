@@ -2,10 +2,10 @@ def solution(n, words):
     
     result = []
     
-    for i in range(len(words)-1, 0, -1):
-        for j in range(i-1, -1, -1):
+    for i in range(len(words)-1):
+        for j in range(i+1, len(words)):
             if words[i] == words[j]:
-                result.append(i)
+                result.append(j)
                 break
     
     for i in range(len(words)-1):
@@ -20,7 +20,4 @@ def solution(n, words):
         return [who, cnt]
     else:
         return [0, 0]
-    
-    
-
     
