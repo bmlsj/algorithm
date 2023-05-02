@@ -37,7 +37,6 @@ def bfs():
         if ice[x][y] < 0:
             ice[x][y] = 0
 
-    return 1
 
 
 def dfs(x, y):
