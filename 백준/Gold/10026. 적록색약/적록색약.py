@@ -8,7 +8,6 @@ arr = [list(input()) for _ in range(n)]
 visited = [[False for _ in range(n)] for _ in range(n)]
 q = deque()
 
-
 def colorMap(color):
     for i in range(n):
         for j in range(n):
