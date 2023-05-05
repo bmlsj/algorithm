@@ -1,4 +1,3 @@
-
 for i in range(1, 11):
 
     n, pw = input().split()
@@ -10,4 +9,4 @@ for i in range(1, 11):
         else:
             stack.append(pw[j])
 
-    print(f"#{i} {''.join(map(str, stack))}")
+    print(f"#{i} {''.join(stack)}")
