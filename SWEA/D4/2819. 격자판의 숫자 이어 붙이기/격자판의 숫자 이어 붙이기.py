@@ -1,25 +1,19 @@
-from collections import deque
 t = int(input())
 
 for p in range(1, t + 1):
 
-    def bfs(x, y):
-        q = deque([(x, y, arr[x][y])])
+    def dfs(x, y, now):
+        if len(now) == 7:
+            num.add(now)
+            return
 
-        while q:
-            a, b, now = q.popleft()
+        dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
 
-            dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
-            for i in range(4):
-                nx = a + dx[i]
-                ny = b + dy[i]
-
-                if len(now) == 7:
-                    num.add(now)
-                    continue
-
-                if 0 <= nx < 4 and 0 <= ny < 4:
-                    q.append([nx, ny, now + arr[nx][ny]])
+            if 0 <= nx < 4 and 0 <= ny < 4:
+                dfs(nx, ny, now + arr[nx][ny])
 
 
     arr = [list(input().split()) for _ in range(4)]
@@ -27,6 +21,6 @@ for p in range(1, t + 1):
 
     for k in range(4):
         for j in range(4):
-            bfs(k, j)
+            dfs(k, j, arr[k][j])
 
     print(f"#{p} {len(num)}")
