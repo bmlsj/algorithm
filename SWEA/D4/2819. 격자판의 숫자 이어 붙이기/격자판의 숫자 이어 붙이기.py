@@ -3,13 +3,8 @@ t = int(input())
 
 for p in range(1, t + 1):
 
-    arr = [list(input().split()) for _ in range(4)]
-    num = set()
-
     def bfs(x, y):
-        global sen
-        q = deque()
-        q.append([x, y, arr[x][y]])
+        q = deque([(x, y, arr[x][y])])
 
         while q:
             a, b, now = q.popleft()
@@ -24,13 +19,14 @@ for p in range(1, t + 1):
                     continue
 
                 if 0 <= nx < 4 and 0 <= ny < 4:
-                    # sen += arr[nx][ny]
                     q.append([nx, ny, now + arr[nx][ny]])
 
 
+    arr = [list(input().split()) for _ in range(4)]
+    num = set()
+
     for k in range(4):
         for j in range(4):
-            sen = arr[k][j]
             bfs(k, j)
 
     print(f"#{p} {len(num)}")
