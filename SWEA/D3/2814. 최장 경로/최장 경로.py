@@ -22,10 +22,10 @@ for k in range(1, t + 1):
         if ans < cnt:
             ans = cnt
 
-        for next in graph[v]:
-            if not visited[next]:
+        for i in graph[v]:
+            if not visited[i]:
                 visited[v] = True
-                dfs(next, cnt + 1)
+                dfs(i, cnt + 1)
                 visited[v] = False
 
 
