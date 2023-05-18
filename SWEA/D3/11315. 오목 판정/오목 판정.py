@@ -1,50 +1,47 @@
 
 t = int(input())
 
+# 오른쪽 아래 대각선
 def rl_digo(i, j):
+    
     ans = False
-    # 오른쪽 아래 대각선
+    
+    a = cnt = 0
+    while arr[i + a][j + a] == 'o' and 0 <= i + a < n and 0 <= j + a < n:
+        cnt += 1
+        a += 1
 
-    if arr[i][j] == 'o':
-        a = cnt = 0
-        while arr[i + a][j + a] == 'o' and 0 <= i + a < n and 0 <= j + a < n:
-            cnt += 1
-            a += 1
+        if cnt == 5:
+            ans = True
+            return ans
 
-            if cnt == 5:
-                ans = True
-                return ans
-
-            if i + a >= n or j + a >= n:
-                break
+        if i + a >= n or j + a >= n:
+            break
 
     return ans
 
-
+# 왼쪽 아래 대각선
 def lr_diago(i, j):
     ans = False
-    # 왼쪽 아래 대각선
+    
+    a = cnt = 0
+    while arr[i + a][j - a] == 'o' and 0 <= i + a < n and 0 <= j - a < n:
+        cnt += 1
+        a += 1
 
-    if arr[i][j] == 'o':
-        a = cnt = 0
-        while arr[i + a][j - a] == 'o' and 0 <= i + a < n and 0 <= j - a < n:
-            cnt += 1
-            a += 1
+        if cnt == 5:
+            ans = True
+            return ans
 
-            if cnt == 5:
-                ans = True
-                return ans
-
-            if i + a >= n or j - a < 0:
-                break
+        if i + a >= n or j - a < 0:
+            break
 
     return ans
 
-
+# 가로, 세로
 def garo_sero(i, j):
     ans = False
 
-    # 가로, 세로
     s_cnt = g_cnt = 0
     a = 0
     while arr[i][j + a] == 'o':
@@ -81,8 +78,8 @@ for k in range(1, t + 1):
     for i in range(n):
         for j in range(n):
             if arr[i][j] == 'o' and rl_digo(i, j) or lr_diago(i, j) or garo_sero(i, j):
-            	ans = True
-            	break
+                ans = True
+                break
 
     if ans:
         print(f"#{k} YES")
