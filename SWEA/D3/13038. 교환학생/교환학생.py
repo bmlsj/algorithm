@@ -10,7 +10,6 @@ for i in range(1, t + 1):
         if days[a] == 1:
             onelist.append(a)
 
-    ans = 10**6
     cntlist = []
     for start in onelist:
         day, cnt = 0, 0
@@ -20,7 +19,7 @@ for i in range(1, t + 1):
                 if days[a] == 1:
                     cnt += days[a]
                 day += 1
-                if cnt >= n:
+                if cnt == n:
                     break
             start = 0
         cntlist.append(day)
