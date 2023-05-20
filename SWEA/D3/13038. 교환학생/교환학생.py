@@ -13,7 +13,7 @@ for i in range(1, t + 1):
     cntlist = []
     for start in onelist:
         day, cnt = 0, 0
-        s = start
+ 
         while cnt != n:
             for a in range(start, 7):
                 if days[a] == 1:
