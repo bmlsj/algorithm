@@ -1,32 +1,13 @@
-import sys
-from collections import deque
-
-input = sys.stdin.readline
-
-# 1xN 크기 미로
 n = int(input())
 jump = list(map(int, input().split()))
-visited = [False] * n
+dp = [0] * n
 
-# jump[i]이하만큼 점프 가능
-# 최소 몇번 점프를  해야하는 가
+for i in range(n):
+    for j in range(1, jump[i] + 1):
+        if i + j < n and dp[i+j] == 0:
+            dp[i+j] = dp[i] + 1
 
-def minjump(idx, cnt):
-
-    queue = deque()
-    queue.append([idx, cnt])
-
-    while queue:
-        idx, cnt = queue.popleft()
-
-        if idx == n-1:
-            return cnt
-        for i in range(1, jump[idx] + 1):
-            if idx + i < n and not visited[idx + i]:
-                visited[idx + i] = True
-                queue.append((idx + i, cnt + 1))
-
-    return -1
-
-
-print(minjump(0, 0))
+if dp[1:].count(0):
+    print(-1)
+else:
+    print(dp[n-1])
