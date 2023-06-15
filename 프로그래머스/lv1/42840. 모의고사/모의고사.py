@@ -19,6 +19,5 @@ def solution(answers):
     for i in range(len(ans)):
         if max(ans) == ans[i]:
             res.append(i+1)
-    
-    res.sort()
+
     return res
