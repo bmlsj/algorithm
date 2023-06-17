@@ -23,7 +23,7 @@ def solution(str1, str2):
             for _ in range(min(s1.count(i), s2.count(i))):
                 intersection.append(i)
         
-        uni = list(set(s1) | set(s2))
+        uni = set(s1) | set(s2)
         union = []
         for i in uni:
             for _ in range(max(s1.count(i), s2.count(i))):
