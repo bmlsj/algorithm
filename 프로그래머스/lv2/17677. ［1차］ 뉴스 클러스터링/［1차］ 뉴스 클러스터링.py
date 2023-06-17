@@ -11,10 +11,11 @@ def div(str1):
 def solution(str1, str2):
 
     s1, s2 = div(str1), div(str2)
-    print(s1, s2)
     j = 0
+    
     if len(s1) == 0 and len(s2) == 0:  # 모두 공집합일 경우
         j = 1
+        
     else:
         inter = set(s1) | set(s2)
         intersection = []
@@ -27,9 +28,8 @@ def solution(str1, str2):
         for i in uni:
             for _ in range(max(s1.count(i), s2.count(i))):
                 union.append(i)
-        print(intersection, union)
+
         j = len(intersection) / len(union)
-        print(j)
+
         
     return int(j * 65536)
-    # aa, aa  // aa, aa, aa
