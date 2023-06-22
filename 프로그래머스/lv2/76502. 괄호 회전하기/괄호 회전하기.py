@@ -18,7 +18,7 @@ def check(s):
 
     if len(stack) or not ans:
         return False
-    elif len(stack) == 0 or ans:
+    elif len(stack) == 0 and ans:
         return True
     
     
