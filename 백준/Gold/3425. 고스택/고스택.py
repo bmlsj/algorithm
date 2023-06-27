@@ -104,7 +104,7 @@ while True:
     comment_list = []
 
     while True:
-        comment = input().strip()
+        comment = input()
         if comment == "END":
             break
 
