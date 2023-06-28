@@ -1,5 +1,6 @@
 def solution(genres, plays):
     
+    # https://dogsavestheworld.tistory.com/110
     # 많이 재생된 장르
     # 장르 내 많이 재생된 노래
     # 재생 횟수가 같다면, 고유번호(인덱스)가 낮은 노래
@@ -19,9 +20,10 @@ def solution(genres, plays):
         
     for i in range(len(genres)):
         genrePlay[genres[i]] += plays[i]
-    print(genrePlay)
-    genrePlay = sorted(genrePlay, key=lambda a:genrePlay[a], reverse=True)
 
+    genrePlay = sorted(genrePlay, key=lambda a:genrePlay[a], reverse=True)
+    
+    # 정렬한 장르순 재생한 노래를 2개까지 선택
     ans = []
     cnt = dict()
     for gen in genrePlay:
