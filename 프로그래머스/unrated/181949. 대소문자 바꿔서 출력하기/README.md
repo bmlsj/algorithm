@@ -1,10 +1,10 @@
 # [unrated] 대소문자 바꿔서 출력하기 - 181949 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181949) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181949?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 7.37 MB, 시간: 12.14 ms
+메모리: 47.9 MB, 시간: 215.85 ms
 
 ### 구분
 
