@@ -58,10 +58,12 @@ while True:
 
     # 연쇄가 일어난 위의 뿌요들을 아래로 내림
     for color, x, y in connected_puyo:
-        for i in range(x, 0, -1):
-            field[i][y] = field[i - 1][y]
-            field[i - 1][y] = '.'
+        if field[x-1][y] != '.' and field[x-1][y] != color:
+            for i in range(x, 0, -1):
+                field[i][y] = field[i - 1][y]
+                field[i - 1][y] = '.'
 
     res += 1
+
 
 print(res)
