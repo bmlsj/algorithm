@@ -17,7 +17,7 @@ def suitable_position(player, power):
             position[player] = i
             suitable_position(player + 1, powers[player][i] + power)
             visited[i] = False
-            position[player] = -1
+            position[player] = 0
 
 
 for _ in range(c):
