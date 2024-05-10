@@ -33,6 +33,4 @@ def solution(friends, gifts):
                 elif jiso[i] == jiso[j]:
                     continue
     
-
-    # print(gift)
     return max(gift)
