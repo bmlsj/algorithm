@@ -1,21 +1,11 @@
 def solution(n, lost, reserve):
-    s = set()
-    reserve.sort()
-    lost.sort()
-
-    for i in range(1, n + 1):
-        if i in lost:
-            continue
-        s.add(i)
-
-    for i in reserve:
-        if i in lost:
-            s.add(i)
-        elif i - 1 in lost and i - 1 not in s:
-            s.add(i - 1)
-        elif i + 1 in lost and i + 1 not in s:
-            s.add(i + 1)
-
-
-    print(s)
-    return len(s)
+    _reserve = list(set(reserve) - set(lost))
+    _lost = list(set(lost) - set(reserve))
+    for r in _reserve:
+        f = r - 1
+        b = r + 1
+        if f in _lost:
+            _lost.remove(f)
+        elif b in _lost:
+            _lost.remove(b)
+    return n - len(_lost)
