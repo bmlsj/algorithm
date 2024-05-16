@@ -16,9 +16,6 @@ def solution(n, lost, reserve):
         elif i + 1 in lost and i + 1 not in s:
             s.add(i + 1)
 
-    for i in reserve:
-        if i not in s:
-            s.add(i)
 
     print(s)
     return len(s)
