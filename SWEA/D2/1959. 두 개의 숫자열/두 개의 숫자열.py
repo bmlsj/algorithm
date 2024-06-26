@@ -1,25 +1,56 @@
-t = int(input())
+import java.util.ArrayList;
+import java.util.Scanner;
 
-for i in range(1, t + 1):
+class Solution {
 
-    m, n = map(int, input().split())
-    alist = list(map(int, input().split()))
-    blist = list(map(int, input().split()))
-    result = []
+    static int swap(int a, int b) {
+        return a;
+    }
 
-    if n > m:
-        for k in range(n - m + 1):
-            ans = 0
-            for j in range(m):
-                ans += (alist[j] * blist[k + j])
+    public static void main(String[] args) throws Exception {
 
-            result.append(ans)
-    else:
-        for k in range(m - n + 1):
-            ans = 0
-            for j in range(n):
-                ans += (alist[k + j] * blist[j])
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
 
-            result.append(ans)
+        for (int q = 0; q < T; q++) {
+            int n = sc.nextInt();
+            int m = sc.nextInt();
 
-    print(f"#{i} {max(result)}")
+            ArrayList<Integer> a = new ArrayList<>();
+            ArrayList<Integer> b = new ArrayList<>();
+            ArrayList<Integer> t = new ArrayList<>();
+
+            for (int i = 0; i < n; i++) {
+                a.add(sc.nextInt());
+            }
+
+            for (int i = 0; i < m; i++) {
+                b.add(sc.nextInt());
+            }
+
+            if (n > m) {
+                m = swap(n, n = m);
+                t = a;
+                a = b;
+                b = t;
+            }
+
+            int diff = m - n;
+            int res = 0;
+
+            while (diff >= 0) {
+                int tmp = 0;
+                for (int i = 0; i < n; i++) {
+                    tmp += (a.get(i) * b.get(i + diff));
+                }
+                res = Math.max(tmp, res);
+                diff -= 1;
+            }
+
+
+            System.out.printf("#%d %d\n", q + 1, res);
+        }
+
+
+    }
+}
