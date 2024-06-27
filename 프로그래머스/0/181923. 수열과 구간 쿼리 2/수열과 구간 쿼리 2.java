@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 class Solution {
-    public int[] solution(int[] arr, int[][] queries) {
+    public ArrayList<Integer> solution(int[] arr, int[][] queries) {
         ArrayList<Integer> answer = new ArrayList<>();
 
         for (int i = 0; i < queries.length; i++){
@@ -18,11 +18,6 @@ class Solution {
             }
         }
 
-        int[] result = new int[answer.size()];
-        for (int i = 0; i < answer.size(); i++) {
-            result[i] = answer.get(i);
-        }
-
-        return result;
+        return answer;
     }
 }
