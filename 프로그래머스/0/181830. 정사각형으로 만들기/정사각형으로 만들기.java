@@ -1,41 +1,16 @@
 import java.util.*;
 
 class Solution {
-    public static ArrayList<ArrayList<Integer>> solution(int[][] arr) {
-        int row = arr[0].length;   // 행: 3
-        int col = arr.length;       // 열 : 4
+    public static int[][] solution(int[][] arr) {
+        int max = Math.max(arr[0].length, arr.length);
+        int[][] array = new int[max][max];
 
-        ArrayList<ArrayList<Integer>> arrList = new ArrayList<>();
-        for (int[] r : arr) {   // 2차원 리스트 생성
-            ArrayList<Integer> listRow = new ArrayList<>();
-            for (int num : r) {
-                listRow.add(num);
-            }
-            arrList.add(listRow);
-        }
-        // System.out.println(arrList);
-
-        if (row > col) {  // col에 행의 수와 같아지도록 0추가
-
-            for (int i = 0; i < row - col; i++) {
-                ArrayList<Integer> addList = new ArrayList<>();
-                for (int j = 0; j < row; j++) {
-                    addList.add(0);
-                }
-                arrList.add(addList);
-            }
-            return arrList;
-
-        } else if (col > row) {  // row에 열의 수와 같아지도록 0추가
-            for (ArrayList<Integer> r : arrList) {
-                for (int i = 0; i < col - row; i++) {
-                    r.add(0);
-                }
-            }
-            // System.out.println(arrList);
-            return arrList;
+        for (int i = 0; i < arr.length; i++) {
+            // array[i]의 0번째부터 arr[0].length 길이 까지 arr[i]를 채워 넣는다.
+            // 원본 배열, 복사 시점, 복사할 배열, 복사할 배열의 복사시점, 복사할 요소 수
+            System.arraycopy(arr[i], 0, array[i], 0, arr[0].length);
         }
 
-        return arrList;
+        return array;
     }
 }
