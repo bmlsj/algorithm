@@ -9,6 +9,7 @@ def rotate90(matrix, n):
     return newMap
 
 
+
 T = int(input())
 for t in range(T):
 
