@@ -8,13 +8,13 @@ class Solution {
             if (ch == '(') {
                 stack.push(ch);
             } else if (ch == ')') {
-                if (stack.isEmpty() || stack.peek() != '(') {
+                if (stack.empty() || stack.peek() != '(') {
                     return false;
                 }
                 stack.pop();
             }
         }
         
-        return stack.isEmpty();
+        return stack.empty();
     }
 }
