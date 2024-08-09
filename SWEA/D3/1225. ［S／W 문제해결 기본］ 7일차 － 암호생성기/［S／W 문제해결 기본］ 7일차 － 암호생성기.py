@@ -1,23 +1,55 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
-for _ in range(1, 11):
-    n = int(input())
-    arr = list(map(int, input().split()))
+public class Solution {
 
-    while True:
-        a = True
-        
-        for k in range(1, 6):
-            arr[0] -= k
-            arr.append(arr[0])
-            arr.remove(arr[0])
+	public static void main(String args[]) throws Exception {
 
-            if arr[-1] <= 0:
-                a = False
-                arr[-1] = 0
-                break
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        if not a:
-            break
-            
-    arr = map(str, arr)
-    print(f"#{n} {' '.join(arr)}")
+		for (int test_case = 1; test_case <= 10; test_case++) {
+			int n = Integer.parseInt(in.readLine());
+
+			String[] split = in.readLine().split(" ");
+			Queue<Integer> queue = new ArrayDeque<>();
+
+			for (String s : split) {
+				queue.offer(Integer.parseInt(s));
+			}
+
+			while (true) {
+				boolean check = true;
+				for (int i = 1; i <= 5; i++) {
+
+					int first = queue.poll() - i;
+					if (first <= 0) {
+						queue.offer(0);
+						check = false;
+						break;
+					} else {
+						queue.offer(first);
+					}
+
+				}
+
+				if (!check) {
+					break;
+				}
+
+			}
+			
+			String ans = "";
+			for (int q: queue) {
+				ans += q + " ";
+			}
+			System.out.printf("#%d %s\n", n, ans);
+
+		}
+	}
+
+}
