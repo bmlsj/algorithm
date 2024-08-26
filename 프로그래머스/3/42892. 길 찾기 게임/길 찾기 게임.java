@@ -1,10 +1,10 @@
 import java.util.*;
 class Solution {
-    static class TreeNode {
+    static class Node {
         int x, y, index;
-        TreeNode left, right;
+        Node left, right;
 
-        TreeNode(int x, int y, int index) {
+        Node(int x, int y, int index) {
             this.x = x;
             this.y = y;
             this.index = index;
@@ -13,10 +13,10 @@ class Solution {
 
     public int[][] solution(int[][] nodeinfo) {
         int n = nodeinfo.length;
-        TreeNode[] nodes = new TreeNode[n];
+        Node[] nodes = new Node[n];
 
         for (int i = 0; i < n; i++) {
-            nodes[i] = new TreeNode(nodeinfo[i][0], nodeinfo[i][1], i + 1);
+            nodes[i] = new Node(nodeinfo[i][0], nodeinfo[i][1], i + 1);
         }
 
         // 정렬
@@ -26,7 +26,7 @@ class Solution {
         });
 
         // 이진 트리 생성
-        TreeNode root = nodes[0];
+        Node root = nodes[0];
         for (int i = 1; i < n; i++) {
             insertNode(root, nodes[i]);
         }
@@ -49,7 +49,7 @@ class Solution {
     }
 
     // 노드 추가
-    private void insertNode(TreeNode parent, TreeNode child) {
+    private void insertNode(Node parent, Node child) {
         if (child.x < parent.x) {  // 자식 노드의 값은 항상 부모 노드보다 작다
             if (parent.left == null) {
                 parent.left = child;
@@ -65,14 +65,14 @@ class Solution {
         }
     }
 
-    private void preOrder(TreeNode node, List<Integer> result) {
+    private void preOrder(Node node, List<Integer> result) {
         if (node == null) return;
         result.add(node.index);  // V
         preOrder(node.left, result);  // L
         preOrder(node.right, result);  // R
     }
 
-    private void postOrder(TreeNode node, List<Integer> result) {
+    private void postOrder(Node node, List<Integer> result) {
         if (node == null) return;
         postOrder(node.left, result);  // L
         postOrder(node.right, result);  // R
