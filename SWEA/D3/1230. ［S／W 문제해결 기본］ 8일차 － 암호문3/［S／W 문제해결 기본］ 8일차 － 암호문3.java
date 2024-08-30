@@ -46,9 +46,8 @@ public class Solution {
 					int cnt = Integer.parseInt(split[idx++]);
 
 					for (int i = 0; i < cnt; i++) {
-						if (rmIdx < passChange.size()) {
-							passChange.remove(rmIdx);
-						}
+						passChange.remove(rmIdx);
+
 					}
 
 				} else if (command.equals("A")) {
@@ -64,7 +63,7 @@ public class Solution {
 			}
 
 			System.out.print("#" + t);
-			for(int i = 0; i < Math.min(10, passChange.size()); i++) {
+			for (int i = 0; i < 10; i++) {
 				System.out.print(" " + passChange.get(i));
 			}
 			System.out.println();
