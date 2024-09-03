@@ -1,40 +1,70 @@
+import java.util.*;
 
+public class Solution {
+    static int result;
+    static char[] values;
+    static int length;
+    static Map<Map.Entry<String, Integer>, Integer> visited;
 
+    public static void main(String[] args) throws Exception {
+    	
+    	// System.setIn(new FileInputStream("1244_input.txt"));
+        Scanner sc = new Scanner(System.in);
 
-# cnt는 몇 번 바꿨는 지
-def dfs(cnt):
-    global result
+        int T = sc.nextInt();
+        sc.nextLine(); // 개행 문자 소비
 
-    # 횟수를 다 사용했다면
-    if not cnt:
-        # str -> int로 변경
-        tmp = int(''.join(values))
+        for (int t = 0; t < T; t++) {
+            result = -1;
+            String[] input = sc.nextLine().split(" ");
 
-        # 가지고 있는 최대 수보다 크면 갱신
-        if result < tmp:
-            result = tmp
-        return
+            values = input[0].toCharArray();
+            int change = Integer.parseInt(input[1]);
+            length = values.length;
 
-    for i in range(length):
-        for j in range(i+1, length):
+            visited = new HashMap<>();
+            dfs(change);
 
-            values[i], values[j] = values[j], values[i]
-            tmp_key = ''.join(values)
+            System.out.println("#" + (t + 1) + " " + result);
+        }
 
-            if visited.get((tmp_key, cnt-1), 1):
-                visited[(tmp_key, cnt-1)] = 0
-                dfs(cnt-1)
+        sc.close();
+    }
 
-            values[i], values[j] = values[j], values[i]
+    static void dfs(int cnt) {
+        // 횟수를 다 사용했다면
+        if (cnt == 0) {
+            int tmp = Integer.parseInt(new String(values));
 
-for t in range(int(input())):
-    result = -1
-    value, change = input().split()
+            // 가지고 있는 최대 수보다 크면 갱신
+            if (result < tmp) {
+                result = tmp;
+            }
+            return;
+        }
 
-    values = list(value)
-    change = int(change)
-    length = len(values)
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                // 값 교환
+                swap(i, j);
 
-    visited = {}
-    dfs(change)
-    print("#{} {}".format(t+1, result))
+                String tmpKey = new String(values);
+                Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(tmpKey, cnt - 1);
+
+                if (visited.getOrDefault(key, 1) == 1) {
+                    visited.put(key, 0);
+                    dfs(cnt - 1);
+                }
+
+                // 값 복구
+                swap(i, j);
+            }
+        }
+    }
+
+    static void swap(int i, int j) {
+        char temp = values[i];
+        values[i] = values[j];
+        values[j] = temp;
+    }
+}
