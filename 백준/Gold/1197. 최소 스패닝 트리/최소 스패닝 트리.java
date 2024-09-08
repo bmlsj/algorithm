@@ -61,7 +61,7 @@ public class Main {
 				min += edge.weight;
 				cnt++;
 
-				if (cnt == e - 1)
+				if (cnt == v - 1)
 					break;
 			}
 		}
