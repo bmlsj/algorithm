@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 /*
 1. 부분 집합 구하기
@@ -14,96 +15,140 @@ import java.util.Queue;
 public class Main {
 
 	private static int n, r;
+	private static int[][] graph;
 	private static int[] population;
+	private static boolean[] selected;
 	private static int[] parents;
-	private static List<Integer>[] link;
+	private static int answer = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws Exception {
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 
 		n = Integer.parseInt(in.readLine());
+		graph = new int[n][n];
 		population = new int[n]; // 인구수
 		parents = new int[n];
-		link = new ArrayList[n];
+		selected = new boolean[n];
 
 		String[] split = in.readLine().split(" ");
 		for (int i = 0; i < n; i++) {
 			population[i] = Integer.parseInt(split[i]);
 		}
 
-		for (int i = 0; i < n; i++) {
-			link[i] = new ArrayList<>();
-		}
-
 		// 인접 구역 수 : 인접 구역 번호
-		for (int i = 0; i < n; i++) {
-			split = in.readLine().split(" ");
-			int cnt = Integer.parseInt(split[0]);
-			for (int j = 1; j <= cnt; j++) {
-				link[i].add(Integer.parseInt(split[j]) - 1);
+		for (int from = 0; from < n; from++) {
+			st = new StringTokenizer(in.readLine());
+			int cnt = Integer.parseInt(st.nextToken()); // Number of adjacent districts
+			for (int i = 0; i < cnt; i++) {
+				int to = Integer.parseInt(st.nextToken()) - 1; // Convert to 0-based index
+				graph[from][to] = 1;
 			}
 		}
 
-		// System.out.println(1 << n);
-		int ans = Integer.MAX_VALUE;
-		for (int i = 1; i < (1 << n) - 1; i++) {
-			List<Integer> groupA = new ArrayList<Integer>();
-			List<Integer> groupB = new ArrayList<Integer>();
+		subSet(0);
+		System.out.println(answer == Integer.MAX_VALUE ? -1 : answer);
 
-			for (int j = 0; j < n; j++) {
-				if ((i & (1 << j)) > 0) {
-					groupA.add(j);
+	}
+
+	private static void subSet(int r) {
+
+		if (r == n) {
+			List<Integer> group1 = new ArrayList<>();
+			List<Integer> group2 = new ArrayList<>();
+
+			for (int i = 0; i < n; i++) {
+
+				if (selected[i]) {
+					group1.add(i);
 				} else {
-					groupB.add(j);
+					group2.add(i);
 				}
 			}
 
-			if (isConneccted(groupA) && isConneccted(groupB)) {
-				ans = Math.min(ans, calcuDiff(groupA, groupB));
+			if (group1.size() == 0 || group2.size() == 0) {
+				return;
 			}
+
+			makeSet();
+			distribute(group1);
+			distribute(group2);
+
+			if (isConnected(group1, group2)) {
+				int sum1 = populSum(group1);
+				int sum2 = populSum(group2);
+				answer = Math.min(answer, Math.abs(sum1 - sum2));
+			}
+
+			return;
+
 		}
 
-		System.out.println(ans == Integer.MAX_VALUE ? -1 : ans);
+		selected[r] = true;
+		subSet(r + 1);
+		selected[r] = false;
+		subSet(r + 1);
 
 	}
 
-	// bfs : 그룹이 연결되어 있는지 확인하는 함수
-	private static boolean isConneccted(List<Integer> group) {
+	private static int populSum(List<Integer> group) {
+		int sum = 0;
+		for (int idx : group) {
+			sum += population[idx];
+		}
 
-		boolean[] visited = new boolean[n];
-		Queue<Integer> queue = new ArrayDeque<>();
-		queue.add(group.get(0));
-		visited[group.get(0)] = true;
-		int cnt = 1;
+		return sum;
+	}
 
-		while (!queue.isEmpty()) {
-			int curr = queue.poll();
-			for (int next : link[curr]) {
-				if (!visited[next] && group.contains(next)) {
-					visited[next] = true;
-					queue.add(next);
-					cnt++;
+	private static void distribute(List<Integer> group) {
+		for (int from : group) {
+			for (int to : group) {
+				if (from != to && graph[from][to] == 1) {
+					union(from, to);
 				}
 			}
 		}
-
-		return cnt == group.size(); // 모든 노드가 연결되었는지 확인
 	}
 
-	public static int calcuDiff(List<Integer> groupA, List<Integer> groupB) {
+	private static boolean isConnected(List<Integer> group1, List<Integer> group2) {
 
-		int populA = 0, populB = 0;
-
-		for (int g : groupA) {
-			populA += population[g];
+		int root1 = find(group1.get(0));
+		for (int i = 1; i < group1.size(); i++) {
+			if (find(group1.get(i)) != root1) {
+				return false;
+			}
 		}
 
-		for (int g : groupB) {
-			populB += population[g];
+		int root2 = find(group2.get(0));
+		for (int i = 1; i < group2.size(); i++) {
+			if (find(group2.get(i)) != root2) {
+				return false;
+			}
 		}
 
-		return Math.abs(populA - populB);
+		return true;
+	}
+
+	private static void makeSet() {
+		for (int i = 0; i < n; i++) {
+			parents[i] = i;
+		}
+	}
+
+	private static int find(int u) {
+		if (parents[u] == u) {
+			return u;
+		}
+		return parents[u] = find(parents[u]);
+	}
+
+	private static void union(int u, int v) {
+		int rootU = find(u);
+		int rootV = find(v);
+		if (rootU != rootV) {
+			parents[rootV] = rootU; // Union by setting one root as the parent of the other
+		}
 	}
 
 }
