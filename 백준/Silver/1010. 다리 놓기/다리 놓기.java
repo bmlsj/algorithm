@@ -1,9 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 
 // C(m, n) = m! / (n! * (m - n)!)
 public class Main {
+
+	private static int[][] dp;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -14,27 +15,21 @@ public class Main {
 			int n = Integer.parseInt(split[0]); // 선택할 개수
 			int m = Integer.parseInt(split[1]); // 전체 개수
 
+			dp = new int[30][30];
 			// 조합의 수를 계산하여 출력
 			System.out.println(combi(m, n));
 		}
 	}
 
-	// 이항 계수를 계산하는 메서드
-	private static BigInteger combi(int m, int n) {
-		if (n > m) {
-			return BigInteger.ZERO;
-		}
-		BigInteger numerator = fac(m);
-		BigInteger denominator = fac(n).multiply(fac(m - n));
-		return numerator.divide(denominator);
-	}
+	private static int combi(int n, int r) {
 
-	// 팩토리얼을 계산하는 메서드
-	private static BigInteger fac(int num) {
-		BigInteger result = BigInteger.ONE;
-		for (int i = 2; i <= num; i++) {
-			result = result.multiply(BigInteger.valueOf(i));
+		if (n == r || r == 0) {
+			return dp[n][r] = 1;
 		}
-		return result;
+		if (dp[n][r] > 0) {
+			return dp[n][r];
+		}
+        dp[n][r] = combi(n - 1, r - 1) + combi(n - 1, r);
+		return dp[n][r];
 	}
 }
