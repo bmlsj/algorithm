@@ -2,67 +2,65 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.StringTokenizer;
+
+/*
+ * 한번에 끝까지 가는 dfs가 아닌 bfs로 풀이해야 시간복잡도를 줄일 수 있다.
+ * 중복 경로를 탐색하지 않기 위해 visited 가 필요하다
+ */
 
 public class Main {
 
-	private static int n, k;
-	private static boolean[] visited;
-	private static int INF = 100001;
+	static int k, n;
+	static boolean[] visited;
+	static final int MAX = 100001;
 
 	public static void main(String[] args) throws Exception {
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String[] split = in.readLine().split(" ");
-		n = Integer.parseInt(split[0]);
-		k = Integer.parseInt(split[1]);
+		StringTokenizer st = new StringTokenizer(in.readLine());
 
-		visited = new boolean[INF];
+		n = Integer.parseInt(st.nextToken()); // 수빈
+		k = Integer.parseInt(st.nextToken()); // 동생
 
-		int ans = find(n);
-		if (n == k) {
-			ans = 0;
-		}
+		visited = new boolean[MAX];
+		int ans = findK();
 		System.out.println(ans);
-		// System.out.println(Arrays.toString(visited));
-
 	}
 
-	private static int[] dx = { -1, 1 };
+	private static int findK() {
 
-	private static int find(int v) {
-
-		Queue<int[]> queue = new ArrayDeque<>();
-		queue.offer(new int[] { v, 0 });
-		visited[v] = true;
+		Queue<int[]> queue = new ArrayDeque<int[]>();
+		queue.add(new int[] { n, 0 }); // 시작 지점과 시간
+		visited[n] = true;
 
 		while (!queue.isEmpty()) {
+
 			int[] curr = queue.poll();
-			int p = curr[0];
+			int position = curr[0];
 			int time = curr[1];
-			if (p == k) {
+
+			if (position == k) {
 				return time;
 			}
 
-			for (int i = 0; i < 3; i++) {
-				int x = 0;
-				if (i < 2) {
-					x = p + dx[i];
-				} else {
-					x = p * 2;
-				}
-
-				if (x >= INF || x < 0)
-					continue;
-
-				if (!visited[x]) {
-
-					visited[x] = true;
-					queue.offer(new int[] { x, time + 1 });
-				}
+			if (position + 1 < MAX && !visited[position + 1]) {
+				visited[position + 1] = true;
+				queue.offer(new int[] { position + 1, time + 1 });
 			}
+
+			if (position - 1 >= 0 && !visited[position - 1]) {
+				visited[position - 1] = true;
+				queue.offer(new int[] { position - 1, time + 1 });
+			}
+
+			if (position * 2 < MAX && !visited[position * 2]) {
+				visited[position * 2] = true;
+				queue.offer(new int[] { position * 2, time + 1 });
+			}
+
 		}
 		return -1;
-
 	}
 
 }
