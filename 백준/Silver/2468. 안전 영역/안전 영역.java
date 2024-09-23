@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class Main {
 		}
 
 		List<Integer> ansList = new ArrayList<Integer>();
-		for (int k = min; k <= max; k++) {
+		for (int k = max; k >= min; k--) {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
 					if (map[i][j] >= k) {
