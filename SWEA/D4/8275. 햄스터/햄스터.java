@@ -5,8 +5,8 @@ import java.util.Arrays;
 public class Solution {
 
 	private static int T, N, X, M;
-	private static int[] ans, serial, ansList;
-	private static int total_sum, total_ans;
+	private static int[] combi, ansList;
+	private static int totalSum;
 	private static int[][] record;
 
 	public static void main(String[] args) throws Exception {
@@ -21,13 +21,12 @@ public class Solution {
 			X = Integer.parseInt(split[1]); // 최대 햄수터 수
 			M = Integer.parseInt(split[2]); // 기록
 
-			total_ans = Integer.MIN_VALUE;
-			serial = new int[N];
-			ans = new int[N];
-			record = new int[M][3];
-
+			combi = new int[N];
 			ansList = new int[N];
+			record = new int[M][3];
 			ansList[0] = -1;
+
+			totalSum = -1;
 
 			for (int i = 0; i < M; i++) {
 				split = in.readLine().split(" ");
@@ -37,7 +36,6 @@ public class Solution {
 				int hamCnt = Integer.parseInt(split[2]);
 
 				record[i] = new int[] { to, from, hamCnt };
-
 			}
 
 			woriCheck(0);
@@ -51,21 +49,15 @@ public class Solution {
 				}
 				System.out.println();
 			}
-
 		}
 	}
 
 	private static boolean isChecked(int idx) {
 		int sum = 0;
-
 		for (int i = record[idx][0]; i <= record[idx][1]; i++) {
-			sum += serial[i];
+			sum += combi[i];
 		}
-
-		if (sum == record[idx][2]) {
-			return true;
-		}
-		return false;
+		return sum == record[idx][2];
 	}
 
 	private static void woriCheck(int cnt) {
@@ -78,23 +70,21 @@ public class Solution {
 				}
 			}
 
-			total_sum = 0;
+			int sum = 0;
 			for (int i = 0; i < N; i++) {
-				total_sum += serial[i];
+				sum += combi[i];
 			}
 
-			if (total_ans < total_sum) {
-				total_ans = total_sum;
-				ansList = Arrays.copyOf(serial, N);
+			if (totalSum < sum) { // 햄스터 수가 더 많을 경우
+				totalSum = sum;
+				ansList = Arrays.copyOf(combi, N);
 			}
-
 			return;
 		}
 
 		for (int i = 0; i <= X; i++) { // 0부터 X까지 모든 값을 시도
-			serial[cnt] = i;
+			combi[cnt] = i;
 			woriCheck(cnt + 1);
 		}
 	}
-
 }
