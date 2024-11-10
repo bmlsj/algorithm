@@ -1,0 +1,100 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+public class Solution {
+
+	private static int T, N, X, M;
+	private static int[] ans, serial, ansList;
+	private static int total_sum, total_ans;
+	private static int[][] record;
+
+	public static void main(String[] args) throws Exception {
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(in.readLine());
+
+		for (int t = 1; t <= T; t++) {
+
+			String[] split = in.readLine().split(" ");
+			N = Integer.parseInt(split[0]); // 우리 수
+			X = Integer.parseInt(split[1]); // 최대 햄수터 수
+			M = Integer.parseInt(split[2]); // 기록
+
+			total_ans = Integer.MIN_VALUE;
+			serial = new int[N];
+			ans = new int[N];
+			record = new int[M][3];
+
+			ansList = new int[N];
+			ansList[0] = -1;
+
+			for (int i = 0; i < M; i++) {
+				split = in.readLine().split(" ");
+
+				int to = Integer.parseInt(split[0]) - 1;
+				int from = Integer.parseInt(split[1]) - 1;
+				int hamCnt = Integer.parseInt(split[2]);
+
+				record[i] = new int[] { to, from, hamCnt };
+
+			}
+
+			woriCheck(0);
+			System.out.print("#" + t + " ");
+
+			if (ansList[0] == -1) {
+				System.out.println(-1);
+			} else {
+				for (int i = 0; i < N; i++) {
+					System.out.print(ansList[i] + " ");
+				}
+				System.out.println();
+			}
+
+		}
+	}
+
+	private static boolean isChecked(int idx) {
+		int sum = 0;
+
+		for (int i = record[idx][0]; i <= record[idx][1]; i++) {
+			sum += serial[i];
+		}
+
+		if (sum == record[idx][2]) {
+			return true;
+		}
+		return false;
+	}
+
+	private static void woriCheck(int cnt) {
+
+		if (N == cnt) {
+
+			for (int i = 0; i < M; i++) {
+				if (!isChecked(i)) {
+					return;
+				}
+			}
+
+			total_sum = 0;
+			for (int i = 0; i < N; i++) {
+				total_sum += serial[i];
+			}
+
+			if (total_ans < total_sum) {
+				total_ans = total_sum;
+				ansList = Arrays.copyOf(serial, N);
+			}
+
+			return;
+		}
+
+		for (int i = 0; i <= X; i++) { // 0부터 X까지 모든 값을 시도
+			serial[cnt] = i;
+			woriCheck(cnt + 1);
+		}
+	}
+
+}
