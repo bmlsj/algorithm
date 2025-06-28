@@ -1,72 +1,68 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Main {
 
-	static int[][] map;
-	static int[][] check;
-	static int n;
+	private static int N;
+	private static int[][] map;
+	private static boolean[][] visited;
 
 	public static void main(String[] args) throws Exception {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(in.readLine());
-		map = new int[n][n];
-		check = new int[n][n];
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
 
-		int min = Integer.MAX_VALUE, max = -1;
-		for (int i = 0; i < n; i++) {
-			String[] split = in.readLine().split(" ");
-			for (int j = 0; j < n; j++) {
+		map = new int[N][N];
+		int max = -1;
+
+		for (int i = 0; i < N; i++) {
+			String[] split = br.readLine().split(" ");
+			for (int j = 0; j < N; j++) {
 				map[i][j] = Integer.parseInt(split[j]);
-				min = Math.min(min, map[i][j]);
-				max = Math.max(max, map[i][j]);
+				max = Math.max(max, Integer.parseInt(split[j]));
 			}
 		}
 
-		List<Integer> ansList = new ArrayList<Integer>();
-		for (int k = max; k >= min; k--) {
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					if (map[i][j] >= k) {
-						check[i][j] = 1;
+		int ans = 1;
+		for (int height = 2; height <= max; height++) {
+			visited = new boolean[N][N];
+			int cnt = 0;
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					if (!visited[i][j] && map[i][j] >= height) {
+						area(i, j, height);
+						cnt++;
 					}
 				}
 			}
 
-			int ans = 0;
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					if (dfs(i, j)) {
-						ans++;
-					}
-				}
-			}
-
-			ansList.add(ans);
+			ans = Math.max(ans, cnt);
 		}
 
-		Collections.sort(ansList);
-		System.out.println(ansList.get(ansList.size() - 1));
+		System.out.println(ans);
 
 	}
 
-	private static boolean dfs(int x, int y) {
-		if (x < 0 || y < 0 || x >= n || y >= n) {
-			return false;
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, -1, 1 };
+
+	static public void area(int x, int y, int height) {
+
+		visited[x][y] = true;
+
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+
+			if (nx < 0 || ny < 0 || nx >= N || ny >= N) {
+				continue;
+			}
+
+			if (!visited[nx][ny] && map[nx][ny] >= height) {
+				visited[nx][ny] = true;
+				area(nx, ny, height);
+			}
 		}
-		if (check[x][y] == 1) {
-			check[x][y] = 0;
-			dfs(x + 1, y);
-			dfs(x - 1, y);
-			dfs(x, y - 1);
-			dfs(x, y + 1);
-			return true;
-		}
-		return false;
 
 	}
 
