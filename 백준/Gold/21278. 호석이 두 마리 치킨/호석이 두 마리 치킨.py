@@ -1,6 +1,3 @@
-import sys
-input = sys.stdin.readline
-
 n, m = map(int, input().split())
 INF = int(10e6)
 buildings = [[INF] * (n + 1) for _ in range(n + 1)]
