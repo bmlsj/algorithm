@@ -33,9 +33,9 @@ public class Main {
 			graph[b].add(a);
 		}
 
+		
 		for (int i = 0; i < N; i++) {
 			visited = new boolean[N];
-			visited[i] = true;
 			if (friend(i, 1)) {
 				System.out.println(1);
 				return;
@@ -50,11 +50,11 @@ public class Main {
 
 	public static boolean friend(int v, int depth) {
 
-		if (depth == 5) {
+		visited[v] = true;
+		if (depth > 4) {
 			return true;
 		}
 
-		
 		for (int next : graph[v]) {
 			if (!visited[next]) {
 				visited[next] = true;
