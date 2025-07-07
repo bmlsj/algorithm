@@ -1,53 +1,71 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
-	private static boolean[] visited;
-	private static int max = -1;
+	private static int N, M;
+	private static List<Integer>[] graph;
+
 	public static void main(String[] args) throws Exception {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String[] split = in.readLine().split(" ");
-		int a = Integer.parseInt(split[0]);
-		int b = Integer.parseInt(split[1]);
-		List<Integer>[] friends = new ArrayList[a];
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		for (int i = 0; i < a; i++) {
-			friends[i] = new ArrayList<>();
+		String[] split = br.readLine().split(" ");
+		N = Integer.parseInt(split[0]);
+		M = Integer.parseInt(split[1]);
+
+		graph = new ArrayList[N];
+		for (int i = 0; i < N; i++) {
+			graph[i] = new ArrayList<Integer>();
 		}
 
-		for (int i = 0; i < b; i++) {
-			split = in.readLine().split(" ");
-			friends[Integer.parseInt(split[0])].add(Integer.parseInt(split[1]));
-			friends[Integer.parseInt(split[1])].add(Integer.parseInt(split[0]));
+		for (int i = 0; i < M; i++) {
+
+			split = br.readLine().split(" ");
+
+			int a = Integer.parseInt(split[0]);
+			int b = Integer.parseInt(split[1]);
+
+			graph[a].add(b);
+			graph[b].add(a);
 		}
 
-		// System.out.println(Arrays.deepToString(friends));
-
-		for (int i = 0; i < a; i++) {
-			visited = new boolean[a];
-			depth(friends, i, 0);
+		for (int i = 0; i < N; i++) {
+			visited = new boolean[N];
+			visited[i] = true;
+			if (friend(i, 1)) {
+				System.out.println(1);
+				return;
+			}
 		}
-		// System.out.println(max);
-		System.out.println(max >= 4? 1 : 0);
+
+		System.out.println(0);
 
 	}
 
-	private static void depth(List<Integer>[] friends, int curr, int d) {
+	static boolean[] visited;
 
-		visited[curr] = true;
-		for (int next : friends[curr]) {
+	public static boolean friend(int v, int depth) {
+
+		if (depth == 5) {
+			return true;
+		}
+
+		
+		for (int next : graph[v]) {
 			if (!visited[next]) {
 				visited[next] = true;
-				depth(friends, next, d + 1);
+				if (friend(next, depth + 1)) {
+					return true;
+				}
 				visited[next] = false;
-				// System.out.println(curr + " " + next+" "+ d);
 			}
-			max = Math.max(max, d);
-			if (max >= 4) return;
 		}
+
+		return false;
 
 	}
 
