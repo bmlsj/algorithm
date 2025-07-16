@@ -56,22 +56,22 @@ public class Main {
 		    return o2[3] - o1[3];                     // 동
 		});
 		
-		
-		int result = 1;
+	
+		int rank = 1;
 		for(int i = 0; i < N; i++) {
 			
 			if (i > 0) {
 				if (country[i][1] == country[i - 1][1] &&
 						country[i][2] == country[i-1][2] &&
 						country[i][3] == country[i-1][3] ) {
-					// 메달 수가 같을 때
+					// 이전 국가와 메달 수가 같을 때
 				} else {
-					result++;
+					rank = i + 1;
 				}
 			}
 			
 			if (country[i][0] == K) {
-				System.out.println(result);
+				System.out.println(rank);
 				break;
 			}
 		}
