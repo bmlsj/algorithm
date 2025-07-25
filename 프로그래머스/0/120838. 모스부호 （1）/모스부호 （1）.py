@@ -12,12 +12,7 @@ def solution(letter):
     tmp = ''
     
     words = letter.split(' ')
-    for let in words:
-        tmp += let
-        for key in morse.keys():
-            if tmp == key:
-                answer += morse[key]
-                tmp = ''
-                break
+    for key in words:
+        answer += morse[key]
         
     return answer
