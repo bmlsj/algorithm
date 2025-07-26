@@ -7,8 +7,7 @@ import java.util.List;
 public class Main {
 
 	private static int N, M;
-	private static boolean[] visited;
-	private static List<Integer>[] graph;
+	private static int[] parent, truth;
 
 	public static void main(String[] args) throws Exception {
 
@@ -17,72 +16,80 @@ public class Main {
 		N = Integer.parseInt(split[0]); // 사람수
 		M = Integer.parseInt(split[1]); // 파티수
 
+		// 진실 아는 사람
 		split = br.readLine().split(" ");
-		int realN = Integer.parseInt(split[0]); // 진실 아는 사람 수
-
-		if (realN == 0) { // 아무도 없을 경우, 모든 파티에 참석
+		int truthN = Integer.parseInt(split[0]);
+		if (truthN == 0) { // 아무도 없을 경우, 모든 파티에 참석
 			System.out.println(M);
 			return;
 		}
 
-		int[] realPerson = new int[split.length - 1];
-		visited = new boolean[N + 1];
-		if (realN >= 1) {
-			for (int i = 1; i <= realN; i++) {
-				realPerson[i - 1] = Integer.parseInt(split[i]);
-				visited[Integer.parseInt(split[i])] = true;
-			}
+		truth = new int[N + 1];
+		for (int i = 1; i <= truthN; i++) {
+			truth[i - 1] = Integer.parseInt(split[i]);
 		}
 
-		graph = new ArrayList[N + 1];
+		// 부모 초기화
+		parent = new int[N + 1];
 		for (int i = 0; i <= N; i++) {
-			graph[i] = new ArrayList<Integer>();
+			parent[i] = i;
 		}
 
-		int ans = M;
-
-		List<Integer>[] parties = new ArrayList[M];
+		// 파티 참가자 저장
+		List<int[]> parties = new ArrayList<>();
 		for (int i = 0; i < M; i++) {
 			split = br.readLine().split(" ");
-			parties[i] = new ArrayList<>();
-			for (int j = 1; j < split.length; j++) {
-				parties[i].add(Integer.parseInt(split[j]));
+			int[] party = new int[Integer.parseInt(split[0])];
+			for (int j = 0; j < party.length; j++) {
+				party[j] = Integer.parseInt(split[j + 1]);
 			}
-			for (int j = 1; j < split.length - 1; j++) {
-				for (int k = j + 1; k < split.length; k++) {
-					graph[Integer.parseInt(split[k])].add(Integer.parseInt(split[j]));
-					graph[Integer.parseInt(split[j])].add(Integer.parseInt(split[k]));
+
+			// union: 파티 내 사람 연결
+			for (int j = 0; j < party.length - 1; j++) {
+				union(party[j], party[j + 1]);
+			}
+
+			parties.add(party);
+		}
+
+//		System.out.println(Arrays.toString(parent));
+		int ans = M;
+		for (int[] party : parties) {
+			boolean check = false;
+			for (int person : party) {
+				for (int t : truth) {
+					if (find(person) == find(t)) {
+						ans--;
+						check = true;
+						break;
+					}
 				}
-			}
-		}
 
-		for (int i = 1; i <= N; i++) {
-			party(i);
-		}
-
-		for (int i = 0; i < M; i++) {
-			for (int num : parties[i]) {
-				if (visited[num]) {
-					ans--;
+				if (check) {
 					break;
 				}
 			}
 		}
-//		System.out.println(Arrays.toString(parties));
 		System.out.println(ans);
-
 	}
 
-	static void party(int person) {
+	static void union(int u1, int u2) {
 
-		if (visited[person]) {
-			for (int next : graph[person]) {
-				if (!visited[next]) {
-					visited[next] = true;
-					party(next);
-				}
-			}
+		int a = find(u1);
+		int b = find(u2);
+
+		if (a > b) {
+			parent[a] = b;
+		} else {
+			parent[b] = a;
 		}
+	}
 
+	static int find(int u) {
+
+		if (parent[u] != u) {
+			parent[u] = find(parent[u]);
+		}
+		return parent[u];
 	}
 }
