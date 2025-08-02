@@ -2,97 +2,110 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
-// 1. 정확히 3개의 벽을 배치할 수 있는 모든 조합 생성
-// 2. 벽을 배치하고 시뮬레이션을 실행
-// 3. 바이러스가 퍼지는 것을 BFS/DFS로 시뮬레이션
-// 4. 시뮬레이션 후 안전한 공간을 계산
-// 5. 최종적으로 안전한 공간의 최대값을 저장
+/*
+ * 🧭 풀이 방향 (전략 위주)
+1. 벽 3개를 조합으로 세워본다
+먼저, 빈 칸(0) 중에서 3개를 선택해서 벽을 세우는 **조합(Combination)**을 구해야 해.
 
-class Main {
+벽 3개를 세울 수 있는 모든 경우의 수를 고려해야 해.
+예: DFS 또는 for 3중 루프 또는 List<Point>로 조합 구현.
 
-	static int[][] map;
-	static boolean[][] visited;
-	static int N, M, ans = -1;
-	static List<int[]> emptyArr = new ArrayList<int[]>();
+2. 각 조합마다 바이러스 퍼뜨리기 (BFS/DFS)
+벽을 세운 다음에는, 바이러스(2)가 퍼질 수 있도록 시뮬레이션을 해야 해.
 
-	// visited[][][] 로 벽 세우기
+이 부분에서 BFS를 이용해 2가 사방으로 퍼지도록 시뮬레이션을 수행함.
+
+3. 퍼진 뒤 안전영역(0 개수) 세기
+바이러스가 퍼진 이후 **남아 있는 0의 개수(=안전 영역)**를 세고, 이 값들 중 최대값을 업데이트 해줘야 해.
+
+4. 최대 안전영역 출력
+ */
+
+public class Main {
+
+	private static int N, M;
+	private static int[][] map;
+	private static List<Point> blanks;
+
+	static class Point {
+		int x, y;
+
+		Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	// 0: 빈칸, 1: 벽, 2: 바이러스
 	public static void main(String[] args) throws Exception {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String[] split = in.readLine().split(" ");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String[] split = br.readLine().split(" ");
+
 		N = Integer.parseInt(split[0]);
 		M = Integer.parseInt(split[1]);
 
 		map = new int[N][M];
+
+		blanks = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
-			split = in.readLine().split(" ");
+			split = br.readLine().split(" ");
 			for (int j = 0; j < M; j++) {
 				map[i][j] = Integer.parseInt(split[j]);
-
-				if (map[i][j] == 0) { // 벽을 세우기 위한 빈공간 좌표
-					emptyArr.add(new int[] { i, j });
+				if (map[i][j] == 0) { // 빈칸
+					blanks.add(new Point(i, j));
 				}
 			}
 		}
 
-		List<int[]> walls = new ArrayList<int[]>();
-		combWall(0, 0, walls);
-		System.out.println(ans);
+		combination(0, 0);
+		System.out.println(maxAns);
 	}
 
-	// 랜덤으로 3개 벽을 세우기 위한 좌표
-	private static void combWall(int depth, int start, List<int[]> walls) {
+	static int maxAns = Integer.MIN_VALUE;
+
+	static void combination(int start, int depth) {
 
 		if (depth == 3) {
-			simulation(walls); // 벽을 세운 3개의 좌표로 시뮬레이션 돌림
+
+			// map을 복사
+			int[][] copyMap = new int[N][M];
+			for (int i = 0; i < N; i++) {
+				System.arraycopy(map[i], 0, copyMap[i], 0, M);
+			}
+
+			// 바이러스 퍼트리기
+			spreadVirus(copyMap);
+
+			// 안전 영역 계산
+			int cnt = countArea(copyMap);
+			maxAns = Math.max(maxAns, cnt);
+
 			return;
 		}
 
-		for (int i = start; i < emptyArr.size(); i++) {
-			int[] space = emptyArr.get(i);
-			walls.add(space);
-
-			combWall(depth + 1, i + 1, walls);
-			walls.remove(walls.size() - 1);
-
+		for (int i = start; i < blanks.size(); i++) {
+			Point pos = blanks.get(i);
+			map[pos.x][pos.y] = 1; // 벽o
+			combination(i + 1, depth + 1);
+			map[pos.x][pos.y] = 0; // 벽X
 		}
-	}
-
-	// 3개의 벽
-	private static void simulation(List<int[]> walls) {
-
-		int[][] tempMap = new int[N][M]; // 원본 맵으로 다시 되돌리기 위해 맵을 복사
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				tempMap[i][j] = map[i][j];
-			}
-		}
-
-		for (int i = 0; i < walls.size(); i++) { // 3개의 벽 좌표를 1로 만듦
-			int x = walls.get(i)[0];
-			int y = walls.get(i)[1];
-
-			tempMap[x][y] = 1;
-		}
-
-		// 바이러스 퍼트리기
-		spreadVirus(tempMap);
-
-		// 바이러스 퍼진 후 안전한 구역 최대 수 세기
-		int safeArea = countSafeArea(tempMap);
-		ans = Math.max(ans, safeArea);
 
 	}
 
-	// 안전한 공간 세기
-	private static int countSafeArea(int[][] tempMap) {
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, -1, 1 };
+
+	static int countArea(int[][] copyMap) {
+
 		int cnt = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				if (tempMap[i][j] == 0) {
+				if (copyMap[i][j] == 0) {
 					cnt++;
 				}
 			}
@@ -101,51 +114,35 @@ class Main {
 		return cnt;
 	}
 
-	// 바이러스를 퍼트리는 함수
-	private static void spreadVirus(int[][] tempMap) {
+	static void spreadVirus(int[][] copyMap) {
 
-		visited = new boolean[N][M];
+		Queue<Point> virus = new ArrayDeque<Point>();
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				if (tempMap[i][j] == 2 && !visited[i][j]) { // 바이러스이고, 방문하지 않았을 때
-					bfs(i, j, tempMap);
+				if (copyMap[i][j] == 2) {
+					virus.offer(new Point(i, j));
 				}
 			}
 		}
-	}
 
-	private static int[] dx = { -1, 1, 0, 0 };
-	private static int[] dy = { 0, 0, -1, 1 };
+		while (!virus.isEmpty()) {
 
-	private static void bfs(int x, int y, int[][] tempMap) {
-
-		Queue<int[]> queue = new ArrayDeque<int[]>();
-		queue.add(new int[] { x, y });
-		visited[x][y] = true;
-
-		while (!queue.isEmpty()) {
-			int[] curr = queue.poll();
-			x = curr[0];
-			y = curr[1];
-
+			Point pos = virus.poll();
 			for (int i = 0; i < 4; i++) {
-				int nx = x + dx[i];
-				int ny = y + dy[i];
+				int nx = pos.x + dx[i];
+				int ny = pos.y + dy[i];
 
 				if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
 					continue;
 				}
 
-				if (!visited[nx][ny] && tempMap[nx][ny] == 0) {
-					tempMap[nx][ny] = 2;
-					visited[nx][ny] = true;
-					queue.offer(new int[] { nx, ny });
-
+				if (copyMap[nx][ny] == 0) {
+					copyMap[nx][ny] = 2;
+					virus.offer(new Point(nx, ny));
 				}
 			}
 
 		}
-
 	}
 
 }
