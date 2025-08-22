@@ -1,12 +1,6 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
 
 class Main {
 
@@ -69,15 +63,24 @@ class Main {
 
 		if (a != b) {
 
-			// 항상 a가 대표
-			if (size[a] < size[b]) {
-				int tmp = a;
-				a = b;
-				b = tmp;
-			}
+			// 항상 a가 대표를 하게 하기 위해 swap
+//			if (size[a] < size[b]) {
+//				int tmp = a;
+//				a = b;
+//				b = tmp;
+//			}
+			 if (size[a] < size[b]) {
+			        parent[a] = b;       // 작은 집합(a)을 큰 집합(b)에 붙임
+			        size[b] += size[a];  // b가 대표니까 b의 크기를 갱신
+			        return size[b];
+			    } else {
+			        parent[b] = a;       // 작은 집합(b)을 큰 집합(a)에 붙임
+			        size[a] += size[b];  // a가 대표니까 a의 크기를 갱신
+			        return size[a];
+			    }
 
-			parent[b] = a;
-			size[a] += size[b];
+//			parent[b] = a;
+//			size[a] += size[b];
 		}
 
 		return size[a];
