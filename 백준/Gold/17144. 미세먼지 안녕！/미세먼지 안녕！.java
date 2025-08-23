@@ -1,6 +1,9 @@
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 class Main {
 
@@ -26,7 +29,6 @@ class Main {
 		for (int t = 0; t < T; t++) {
 			spread();
 			airPurifier();
-
 		}
 
 		int ans = 0;
@@ -37,7 +39,7 @@ class Main {
 				}
 			}
 		}
-
+		
 		System.out.println(ans);
 
 	}
@@ -93,6 +95,7 @@ class Main {
 			for (int j = 0; j < C; j++) {
 				if (map[i][j] == -1) {
 					top[0] = i;
+					top[1] = j;
 					check = true;
 					break;
 				}
@@ -102,8 +105,8 @@ class Main {
 				break;
 		}
 
-		topLogic(top[0], 0);
-		downLogic(top[0] + 1, 0);
+		topLogic(top[0], top[1]);
+		downLogic(top[0] + 1, top[1]);
 
 	}
 
@@ -118,16 +121,14 @@ class Main {
 			int nx = x + dx[dir];
 			int ny = y + dy[dir];
 
-			if (nx < 0 || nx > sx || ny < 0 || ny >= C) {
+			if (nx < 0 || nx >= R || ny < 0 || ny >= C) {
 				dir = (dir + 1) % 4;
 				nx = x + dx[dir];
 				ny = y + dy[dir];
 			}
 
-			if (nx == sx && ny == sy) {
-				map[nx][ny] = -1;
+			if (nx == sx && ny == sy)
 				break;
-			}
 
 			int tmp = map[nx][ny];
 			map[nx][ny] = prev;
@@ -143,36 +144,33 @@ class Main {
 	static int[] dx2 = { 0, 1, 0, -1 };
 	static int[] dy2 = { 1, 0, -1, 0 };
 
-	static void downLogic(int sx, int sy) {
+	static void downLogic(int x, int y) {
 
 		int dir = 0;
-		int x = sx, y = sy; // 공기 청정기 바로 오른쪽에서 시작
+		int sx = x, sy = y; // 공기 청정기 바로 오른쪽에서 시작
 		int prev = 0;
 
-		while (true) {
+		int nx = sx + dx2[dir];
+		int ny = sy + dy2[dir];
 
-			int nx = x + dx2[dir];
-			int ny = y + dy2[dir];
-
-			if (nx < sx || nx >= R || ny < 0 || ny >= C) {
-				dir = (dir + 1) % 4;
-				nx = x + dx2[dir];
-				ny = y + dy2[dir];
-			}
-
-			if (nx == sx && ny == sy) {
-				map[nx][ny] = -1;
-				break;
-			}
+		while (!(nx == x && ny == y)) {
 
 			int tmp = map[nx][ny];
 			map[nx][ny] = prev;
 			prev = tmp;
 
-			x = nx;
-			y = ny;
+			sx = nx;
+			sy = ny;
+
+			nx = sx + dx2[dir];
+			ny = sy + dy2[dir];
+
+			if (nx < 0 || nx >= R || ny < 0 || ny >= C) {
+				dir = (dir + 1) % 4;
+				nx = sx + dx2[dir];
+				ny = sy + dy2[dir];
+			}
 
 		}
-
 	}
 }
