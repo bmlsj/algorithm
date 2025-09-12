@@ -1,50 +1,55 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class Main {
+class Main {
 
 	public static void main(String[] args) throws Exception {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		int N = Integer.parseInt(br.readLine());
-		List<int[]> meetings = new ArrayList<int[]>();
+
+		int[][] times = new int[N][2];
 
 		for (int i = 0; i < N; i++) {
 			String[] split = br.readLine().split(" ");
 
-			int st = Integer.parseInt(split[0]);
-			int et = Integer.parseInt(split[1]);
+			int start = Integer.parseInt(split[0]);
+			int end = Integer.parseInt(split[1]);
 
-			meetings.add(new int[] { st, et });
+			times[i][0] = start;
+			times[i][1] = end;
 
 		}
 
-		Collections.sort(meetings, new Comparator<int[]>() {
+		// 끝나는 시간이 빠른 순으로 정렬해야
+		Arrays.sort(times, new Comparator<int[]>() {
+
 			@Override
 			public int compare(int[] o1, int[] o2) {
-				if (o1[1] != o2[1])
-					return o1[1] - o2[1]; // 끝나는 시간을 기준으로 오름차순
-				else
-					return o1[0] - o2[0];
-			}
+				int cmp = Integer.compare(o1[1], o2[1]); // 오름차순
+
+				if (cmp == 0) {
+					return Integer.compare(o1[0], o2[0]);
+				}
+
+				return cmp;
+			};
 		});
 
-		int last = 0, cnt = 0;
-		
-		for(int[] meet: meetings) {
-			if (last <= meet[0]) {
-				last = meet[1];
+		// System.out.println(Arrays.deepToString(times));
+
+		int cnt = 1;
+		int last = times[0][1];
+		for (int i = 0; i < N - 1; i++) {
+			if (last <= times[i + 1][0]) {
+				// System.out.println(times[i + 1][0] + " " + times[i + 1][1]);
+				last = times[i + 1][1];
 				cnt++;
 			}
 		}
-		System.out.println(cnt);
 
+		System.out.println(cnt);
 	}
 
 }
