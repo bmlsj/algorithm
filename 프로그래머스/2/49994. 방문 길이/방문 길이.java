@@ -1,32 +1,83 @@
 import java.util.*;
 class Solution {
-    public int solution(String dirs) {
-        int answer = 0;
+    
+    static class Point {
+		int x, y;
+		
+		Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
         
-        HashMap<String, int[]> map = new HashMap<>();
-        map.put("U", new int[]{0, 1});
-        map.put("D", new int[]{0, -1});
-        map.put("R", new int[]{1, 0});
-        map.put("L", new int[]{-1, 0});
-        
-        int x = 0, y = 0;
-        HashSet<String> set = new HashSet<>();
-        
-        for (String dir : dirs.split("")) {
-            
-            int[] move = map.get(dir);
-            int nx = x + move[0], ny = y + move[1];
-            
-            if (Math.abs(nx) < 6 &&  Math.abs(ny) < 6){
-                String path1 = x + "," + y + "," + nx + "," + ny;
-                String path2 = nx + "," + ny + "," + x + "," + y;
-                set.add(path1);
-                set.add(path2);
-                x = nx;
-                y = ny;
-            }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Point)) return false;
+            Point p = (Point) o;
+            return x == p.x && y == p.y;
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
+	}
+    
+    static class Line {
+	    int x1, y1, x2, y2;
+
+	    Line(int x1, int y1, int x2, int y2) {
+	        if (x1 < x2 || (x1 == x2 && y1 < y2)) {
+	            this.x1 = x1; this.y1 = y1;
+	            this.x2 = x2; this.y2 = y2;
+	        } else {
+	            this.x1 = x2; this.y1 = y2;
+	            this.x2 = x1; this.y2 = y1;
+	        }
+	    }
+
+	    @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!(o instanceof Line)) return false;
+	        Line l = (Line) o;
+	        return x1 == l.x1 && y1 == l.y1 && x2 == l.x2 && y2 == l.y2;
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(x1, y1, x2, y2);
+	    }
+	}
+    
+    public int solution(String dirs) {
         
-        return set.size() / 2;
+        char[] dirsList = dirs.toCharArray();
+        HashSet<Line> lines = new HashSet<>();
+		Point st = new Point(0,0);
+        
+        for(char dir : dirs.toCharArray()){
+		    Point next = move(dir, st);
+		    if(next.x != st.x || next.y != st.y){ // 경계 넘어가면 st 그대로
+		        lines.add(new Line(st.x, st.y, next.x, next.y));
+		        st = next;
+		    }
+		}
+        
+        return lines.size();
     }
+    
+    public static Point move(char dir, Point st) {
+        int x = st.x;
+        int y = st.y;
+
+        switch (dir) {
+            case 'L': if (x > -5) x--; break;
+            case 'R': if (x < 5) x++; break;
+            case 'D': if (y > -5) y--; break;
+            case 'U': if (y < 5) y++; break;
+        }
+
+        return new Point(x, y);
+	}
 }
