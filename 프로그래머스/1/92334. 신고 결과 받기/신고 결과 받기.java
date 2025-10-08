@@ -2,51 +2,40 @@ import java.util.*;
 class Solution {
     public static int[] solution(String[] id_list, String[] report, int k) {
 
-		// 중복 신고를 제거하기 위한 HashSet
-		HashSet<String> newReport = new HashSet<>(Arrays.asList(report));
+        HashMap<String, Integer> declar = new HashMap<>();
+        HashMap<String, HashSet<String>> reportMap = new HashMap<>();
+        
+        for(int i = 0; i < id_list.length; i++) {
+            declar.put(id_list[i], 0);
+            reportMap.put(id_list[i], new HashSet<>());
+        }
 
-		// 사용자 별 신고받은 횟수 저장
-		HashMap<String, Integer> reportCnt = new HashMap<>();
-		HashMap<String, HashSet<String>> reportMap = new HashMap<>();
-		HashMap<String, HashSet<String>> declarMap = new HashMap<>();
-		
-		// 사용자에 대한 초기화
-		for (String id : id_list) {
-			reportMap.put(id, new HashSet<>());
-			reportCnt.put(id, 0);
-			declarMap.put(id, new HashSet<>());
-		}
-
-		for (String names : newReport) {
-			String[] split = names.split(" ");
-
-			String user = split[0]; // 이용자
-			String declar = split[1]; // 신고자
-
-			// 신고 당한 사람의 신고 횟수 증가
-			reportCnt.put(declar, reportCnt.get(declar) + 1);
-			// 신고자의 신고 목록에 신고당한 사람 추가
-			reportMap.get(declar).add(user);
-			declarMap.get(user).add(declar);
-
-		}
-
-		int[] result = new int[id_list.length];
-		for (int i = 0; i < id_list.length; i++) {
-			String id = id_list[i];
-			int quit = 0;
-
-			for(String user: declarMap.get(id)) {
-				// k번 이상 신고된 사람을 신고한 사람에게 결과 메일 전송
-				if (reportCnt.get(user) >= k) {
-					quit++;
-				}
-			}
-			
-
-			result[i] = quit;
-		}
-
+        // 신고 관계 저장
+        for(int i = 0; i < report.length; i++) {
+            String[] re = report[i].split(" ");
+            reportMap.get(re[0]).add(re[1]);
+        }
+                
+        // 신고 당한 횟수 저장
+        for(HashSet<String> reportedSet: reportMap.values()) {
+            for(String reported: reportedSet) {
+                declar.put(reported, declar.get(reported) + 1);
+            }
+        }
+        
+        HashMap<String, Integer> declarCnt = new HashMap<>();
+        for(String key: reportMap.keySet()) {
+            for(String name: reportMap.get(key)) {
+                if (declar.get(name) >= k) {
+                    declarCnt.put(key, declarCnt.getOrDefault(key, 0) + 1);
+                }
+            }
+        }
+        
+        int[] result = new int[id_list.length];
+        for(int i = 0; i< id_list.length; i++) {
+            result[i] = declarCnt.getOrDefault(id_list[i], 0);
+        }
 		return result;
 	}
 }
