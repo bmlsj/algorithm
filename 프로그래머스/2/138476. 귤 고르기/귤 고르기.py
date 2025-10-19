@@ -1,22 +1,16 @@
+from collections import Counter
+
 def solution(k, tangerine):
     answer = 0
-    tangerine.sort()
-    map = {}
     
-    for num in tangerine:
-        if num not in map:
-            map[num] = 0
-        map[num] += 1
+    counter = Counter(tangerine)
+    counts = sorted(counter.values(), reverse=True)
     
-    map = dict(sorted(map.items(), key = lambda x:x[1], reverse=True))
-    tmp = 0
-    for key, num in map.items():
-        if map[key] > 0 and tmp < k:
-            while map[key] > 0:
-                tmp += 1
-                map[key] -= 1
+    total = 0
+    for c in counts:
+        total += c
+        answer += 1
+        if total >= k:
+            break
     
-    for key, num in map.items():
-        if num == 0:
-            answer+=1
     return answer
