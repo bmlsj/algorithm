@@ -24,8 +24,7 @@ class Solution {
             q2.add(num);
             q2_sum += num;
         }
-        
-        boolean check = true;
+
         while(q1_sum != total) {
             
             if (answer > (queue1.length + queue2.length) * 3) {
