@@ -2,26 +2,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-class Node implements Comparable<Node> {
-
-	int x, y;
-
-	Node(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	@Override
-	public int compareTo(Node o) {
-
-		if (this.x == o.x) {
-			return this.y - o.y;
-		}
-
-		return this.x - o.x;
-	}
-}
-
 class Point implements Comparable<Point> {
 	int x, y, dis, idx;
 
