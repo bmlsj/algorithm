@@ -1,85 +1,64 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
-	static List<Integer>[] tree;
+	static class Node {
+		int id;
+		List<Node> children = new ArrayList<>();
+		boolean isDeleted = false;
 
+		Node(int id) {
+			this.id = id;
+		}
+	}
+
+	static int N, M;
+	static Node[] nodes;
+	static int ans;
 	public static void main(String[] args) throws Exception {
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String input = br.readLine();
+		N = Integer.parseInt(input);
 
 		String[] split = br.readLine().split(" ");
-
-		tree = new ArrayList[N];
+		nodes = new Node[N];
 		for (int i = 0; i < N; i++) {
-			tree[i] = new ArrayList<Integer>();
+			nodes[i] = new Node(i);
 		}
 
 		int root = -1;
 		for (int i = 0; i < N; i++) {
-			int node = Integer.parseInt(split[i]);
-
-			if (node != -1) {
-				tree[node].add(i);
-			} else {
+			int parent = Integer.parseInt(split[i]);
+			if (parent == -1) { // 부모 노드
 				root = i;
+			} else {
+				nodes[parent].children.add(nodes[i]);
 			}
 		}
-		// System.out.println(Arrays.toString(tree));
-		int remove = Integer.parseInt(br.readLine()); // 제거할 노드
-		int leaf = 0;
 
-		if (remove != root) {
-
-			visited = new boolean[N];
-			removeNode(remove);
-			tree[remove].clear(); // 기존 모든 값 지우기
-			tree[remove].add(-1); // -1 추가
-			
-			for (int i = 0; i < N; i++) {
-			    Iterator<Integer> it = tree[i].iterator();
-			    while (it.hasNext()) {
-			        int num = it.next();
-			        if (num == remove) {
-			            it.remove();  // Iterator를 통해 안전하게 제거
-			        }
-			    }
-			}
-
-          
-  		    for (int i = 0; i < N; i++) {
-  			    if (tree[i].size() == 0) {
-  			    	leaf++;
-  			    }
-  		    }
-		}
-
-		System.out.println(leaf);
+		int delete = Integer.parseInt(br.readLine());
+		nodes[delete].isDeleted = true;
+		ans = 0;
+		countLeaf(nodes[root]);
+		System.out.println(ans);
 
 	}
 
-	static boolean[] visited;
+	static void countLeaf(Node node) {
 
-	static void removeNode(int remove) {
-
-		if (!visited[remove]) {
-			visited[remove] = true;
-			for (int node : tree[remove]) {
-				// System.out.print(node + " ");
-				removeNode(node);
+		if (node.isDeleted) return;
+		boolean isLeaf = true;
+		for (Node next : node.children) {
+			if (!next.isDeleted) {
+				countLeaf(next);
+				isLeaf = false;
+				
 			}
-			
-			tree[remove].clear();
-			tree[remove].add(-1);
-
 		}
-
+		
+		if (isLeaf) ans++;
 	}
-
 }
