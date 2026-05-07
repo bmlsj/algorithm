@@ -7,8 +7,7 @@ class Solution {
     static boolean finished = false;
     
     public String[] solution(String[][] tickets) {
-        
-        String[] answer = {};
+
         
         ticketCount = tickets.length;
         routes = new HashMap<>();
