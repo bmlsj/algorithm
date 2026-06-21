@@ -4,9 +4,7 @@ def solution(record):
     for records in record:
         split = records.split(" ")
 
-        if split[0] == "Enter":
-            re[split[1]] = split[2]
-        elif split[0] == "Change":
+        if split[0] == "Enter" or split[0] == "Change":
             re[split[1]] = split[2]
     
     for records in record:
