@@ -1,44 +1,40 @@
 import java.util.*;
-
 class Solution {
     
     static List<Integer>[] graph;
     static boolean[] visited;
     public int solution(int n, int[][] computers) {
-
-        graph = new ArrayList[n+1];
-        for(int i = 0; i <= n; i++) {
+        int answer = 0;
+        
+        graph = new ArrayList[n];
+        for(int i = 0; i < n; i++) {
             graph[i] = new ArrayList<>();
-        }
-        
-        for (int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) { 
-                if ( i != j && computers[i][j] == 1) {
-                    graph[i+1].add(j+1);
-                }
+            for(int j = 0; j < n; j++) {
+                if (i != j && computers[i][j] == 1) {
+                    graph[i].add(j);
+                } 
             }
         }
         
-        int ans = 0;
-        visited = new boolean[n+1];
-        for(int i = 1; i <= n; i++) {
+        System.out.println(Arrays.toString(graph));
+        visited = new boolean[n];
+        for(int i = 0; i < n; i++) {
             if (!visited[i]) {
-                networt(i);
-                ans++;
+                visited[i] = true;
+                dfs(i);
+                answer++;
             }
         }
-        //System.out.println(Arrays.toString(graph));
         
-        return ans;
+        return answer;
     }
     
-    static void networt(int v) {
+    static void dfs(int v) {
         
-        visited[v] = true;
-        for (int nx: graph[v]) {
-            if (!visited[nx]) {
-                visited[nx] = true;
-                networt(nx);
+        for(int next: graph[v]) {
+            if (!visited[next]) {
+                visited[next] = true;
+                dfs(next);
             }
         }
     }
